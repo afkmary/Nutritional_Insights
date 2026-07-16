@@ -2,11 +2,11 @@ import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const DIET_COLORS = {
-  paleo: "#4F5FDA",
-  vegan: "#4C8C5B",
-  keto: "#7C5CBF",
-  mediterranean: "#D97757",
-  dash: "#E0B84C"
+  paleo: "#FFB8B0",
+  vegan: "#B4E8D4",
+  keto: "#C9BFF0",
+  mediterranean: "#A9D8F0",
+  dash: "#FFD9A8"
 };
 
 export default function PieChartCard({ distribution, loading }) {

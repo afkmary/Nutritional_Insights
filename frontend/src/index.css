@@ -1,13 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 :root {
-  --indigo: #4F5FDA;
-  --indigo-dark: #4249C4;
-  --bg: #F1F2F5;
+  --lilac: #C9BFF0;
+  --lilac-dark: #A996E0;
+  --mint: #B4E8D4;
+  --coral: #FFB8B0;
+  --peach: #FFD9A8;
+  --sky: #A9D8F0;
+  --bg: #F8F7FC;
   --card-bg: #FFFFFF;
-  --text: #1A1A2E;
-  --text-muted: #6B7280;
-  --border: #E2E4EA;
-  --green: #4C8C5B;
-  --purple: #7C5CBF;
+  --text: #372F4F;
+  --text-muted: #8A82A3;
+  --border: #ECE7F9;
+  --shadow: 0 4px 16px rgba(120, 100, 180, 0.08);
 }
 
 * {
@@ -16,21 +21,29 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
 }
 
+h1,
+h2,
+h3,
+.section-title {
+  font-family: "Poppins", "Inter", sans-serif;
+}
+
 .header {
-  background: var(--indigo);
-  color: white;
-  padding: 24px 32px;
+  background: linear-gradient(120deg, var(--mint) 0%, var(--lilac) 100%);
+  color: var(--text);
+  padding: 28px 32px;
 }
 
 .header h1 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .main {
@@ -40,9 +53,10 @@ body {
 }
 
 .section-title {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 700;
   margin: 0 0 16px 0;
+  color: var(--text);
 }
 
 .chart-grid {
@@ -55,17 +69,25 @@ body {
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 18px;
+  padding: 22px;
   min-height: 320px;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(120, 100, 180, 0.14);
 }
 
 .card h3 {
   margin: 0 0 4px 0;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
+  font-family: "Poppins", sans-serif;
 }
 
 .card p {
@@ -88,11 +110,19 @@ body {
 
 .filters-row input,
 .filters-row select {
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  padding: 11px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
   font-size: 0.9rem;
   background: var(--card-bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.filters-row input:focus,
+.filters-row select:focus {
+  border-color: var(--lilac-dark);
 }
 
 .filters-row input {
@@ -107,26 +137,38 @@ body {
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 11px 22px;
   border: none;
-  border-radius: 6px;
-  color: white;
-  font-size: 0.9rem;
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.88rem;
   font-weight: 600;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(120, 100, 180, 0.18);
 }
 
 .btn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-.btn-insights { background: var(--indigo); }
-.btn-insights:hover:not(:disabled) { background: var(--indigo-dark); }
-.btn-recipes { background: var(--green); }
-.btn-recipes:hover:not(:disabled) { background: #3d7349; }
-.btn-clusters { background: var(--purple); }
-.btn-clusters:hover:not(:disabled) { background: #6a4ea8; }
+.btn-insights {
+  background: var(--lilac);
+}
+
+.btn-recipes {
+  background: var(--mint);
+}
+
+.btn-clusters {
+  background: var(--peach);
+}
 
 .meta-note {
   font-size: 0.8rem;
@@ -143,18 +185,26 @@ body {
 }
 
 .page-btn {
-  padding: 8px 14px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  padding: 8px 15px;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
   background: var(--card-bg);
   cursor: pointer;
   font-size: 0.85rem;
+  color: var(--text);
+  transition: background 0.12s ease;
 }
 
 .page-btn.active {
-  background: var(--indigo);
-  color: white;
-  border-color: var(--indigo);
+  background: var(--lilac);
+  color: var(--text);
+  border-color: var(--lilac);
+  font-weight: 600;
+}
+
+.page-ellipsis {
+  padding: 8px 4px;
+  color: var(--text-muted);
 }
 
 .page-btn:disabled {
@@ -163,11 +213,12 @@ body {
 }
 
 .footer {
-  background: var(--indigo);
-  color: white;
+  background: linear-gradient(120deg, var(--lilac) 0%, var(--mint) 100%);
+  color: var(--text);
   text-align: center;
-  padding: 20px;
+  padding: 22px;
   font-size: 0.85rem;
+  font-family: "Poppins", sans-serif;
 }
 
 .empty-state {
@@ -191,9 +242,9 @@ body {
   align-items: center;
   justify-content: center;
   padding: 10px 4px;
-  border-radius: 4px;
+  border-radius: 8px;
   font-weight: 600;
-  color: white;
+  color: var(--text);
 }
 
 .heatmap-label {

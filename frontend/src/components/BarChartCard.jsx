@@ -19,9 +19,9 @@ export default function BarChartCard({ insights, loading }) {
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip />
               <Legend wrapperStyle={{ fontSize: 11 }} />
-              <Bar dataKey="avgProtein" fill="#4F5FDA" name="Protein (g)" />
-              <Bar dataKey="avgCarbs" fill="#4C8C5B" name="Carbs (g)" />
-              <Bar dataKey="avgFat" fill="#7C5CBF" name="Fat (g)" />
+              <Bar dataKey="avgProtein" fill="#C9BFF0" name="Protein (g)" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="avgCarbs" fill="#B4E8D4" name="Carbs (g)" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="avgFat" fill="#FFD9A8" name="Fat (g)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         )}

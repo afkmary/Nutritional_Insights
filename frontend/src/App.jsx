@@ -8,6 +8,21 @@ import { fetchInsights, fetchRecipes, fetchClusters } from "./api.js";
 const DIET_TYPES = ["all", "keto", "paleo", "vegan", "mediterranean", "dash"];
 const PAGE_SIZE = 10;
 
+function getPageNumbers(current, total) {
+  const delta = 2;
+  const pages = [];
+  const start = Math.max(2, current - delta);
+  const end = Math.min(total - 1, current + delta);
+
+  pages.push(1);
+  if (start > 2) pages.push("...");
+  for (let i = start; i <= end; i++) pages.push(i);
+  if (end < total - 1) pages.push("...");
+  if (total > 1) pages.push(total);
+
+  return pages;
+}
+
 export default function App() {
   const [search, setSearch] = useState("");
   const [dietType, setDietType] = useState("keto");
@@ -126,15 +141,19 @@ export default function App() {
             Previous
           </button>
           {recipesData &&
-            Array.from({ length: recipesData.totalPages }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                className={`page-btn ${p === page ? "active" : ""}`}
-                onClick={() => handleGetRecipes(p)}
-              >
-                {p}
-              </button>
-            ))}
+            getPageNumbers(page, recipesData.totalPages).map((p, idx) =>
+              p === "..." ? (
+                <span key={`ellipsis-${idx}`} className="page-ellipsis">…</span>
+              ) : (
+                <button
+                  key={p}
+                  className={`page-btn ${p === page ? "active" : ""}`}
+                  onClick={() => handleGetRecipes(p)}
+                >
+                  {p}
+                </button>
+              )
+            )}
           <button
             className="page-btn"
             disabled={!recipesData || page >= recipesData.totalPages}

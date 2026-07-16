@@ -2,13 +2,14 @@ import React from "react";
 
 const FIELDS = ["protein", "carbs", "fat"];
 
-// Map a correlation value (-1 to 1) to a color intensity
+// Map a correlation value (-1 to 1) to a pastel color intensity
+// Positive correlations -> lilac, negative -> peach, both softened
 function colorFor(value) {
   const intensity = Math.abs(value);
-  const r = value >= 0 ? 79 : 217;
-  const g = value >= 0 ? 95 : 119;
-  const b = value >= 0 ? 218 : 87;
-  const alpha = 0.25 + intensity * 0.65;
+  const r = value >= 0 ? 201 : 255;
+  const g = value >= 0 ? 191 : 217;
+  const b = value >= 0 ? 240 : 168;
+  const alpha = 0.35 + intensity * 0.55;
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
