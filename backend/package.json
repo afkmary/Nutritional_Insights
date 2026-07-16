@@ -1,0 +1,14 @@
+{
+  "name": "diet-analysis-func",
+  "version": "1.0.0",
+  "description": "Phase 2 backend - Nutritional Insights Azure Function",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.5.0",
+    "@azure/storage-blob": "^12.17.0",
+    "csv-parse": "^5.5.6"
+  }
+}
