@@ -170,6 +170,30 @@ h3,
   background: var(--peach);
 }
 
+.btn-refresh {
+  background: var(--sky);
+  padding: 11px 20px;
+  border: none;
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  white-space: nowrap;
+}
+
+.btn-refresh:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(120, 100, 180, 0.18);
+}
+
+.btn-refresh:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .meta-note {
   font-size: 0.8rem;
   color: var(--text-muted);

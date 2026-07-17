@@ -34,7 +34,9 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState({ insights: false, recipes: false, clusters: false });
   const [lastExecTime, setLastExecTime] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   async function handleGetInsights() {
     setLoading((l) => ({ ...l, insights: true }));
@@ -43,6 +45,7 @@ export default function App() {
       const data = await fetchInsights(dietType);
       setInsights(data);
       setLastExecTime(data.executionTimeMs);
+      setLastUpdated(new Date());
     } catch (err) {
       setErrorMsg(err.message);
     } finally {
@@ -58,6 +61,7 @@ export default function App() {
       setRecipesData(data);
       setPage(targetPage);
       setLastExecTime(data.executionTimeMs);
+      setLastUpdated(new Date());
     } catch (err) {
       setErrorMsg(err.message);
     } finally {
@@ -72,11 +76,65 @@ export default function App() {
       const data = await fetchClusters(dietType, 3);
       setClustersData(data);
       setLastExecTime(data.executionTimeMs);
+      setLastUpdated(new Date());
     } catch (err) {
       setErrorMsg(err.message);
     } finally {
       setLoading((l) => ({ ...l, clusters: false }));
     }
+  }
+
+  // Refresh button: re-pulls insights, recipes (current page/search/diet), and
+  // clusters all at once, using whatever filters are currently selected.
+  async function handleRefreshAll() {
+    setRefreshing(true);
+    setErrorMsg(null);
+    setLoading({ insights: true, recipes: true, clusters: true });
+
+    const results = await Promise.allSettled([
+      fetchInsights(dietType),
+      fetchRecipes({ diet: dietType, search, page, pageSize: PAGE_SIZE }),
+      fetchClusters(dietType, 3),
+    ]);
+
+    const [insightsResult, recipesResult, clustersResult] = results;
+    const failures = [];
+
+    if (insightsResult.status === "fulfilled") {
+      setInsights(insightsResult.value);
+    } else {
+      failures.push("insights");
+    }
+
+    if (recipesResult.status === "fulfilled") {
+      setRecipesData(recipesResult.value);
+    } else {
+      failures.push("recipes");
+    }
+
+    if (clustersResult.status === "fulfilled") {
+      setClustersData(clustersResult.value);
+    } else {
+      failures.push("clusters");
+    }
+
+    // Show the slowest of the three execution times, since that's what the
+    // browser actually waited on.
+    const execTimes = results
+      .filter((r) => r.status === "fulfilled")
+      .map((r) => r.value.executionTimeMs)
+      .filter((t) => typeof t === "number");
+    if (execTimes.length > 0) {
+      setLastExecTime(Math.max(...execTimes));
+    }
+
+    if (failures.length > 0) {
+      setErrorMsg(`Refresh failed for: ${failures.join(", ")}`);
+    }
+
+    setLastUpdated(new Date());
+    setLoading({ insights: false, recipes: false, clusters: false });
+    setRefreshing(false);
   }
 
   const anyLoading = loading.insights || loading.recipes || loading.clusters;
@@ -109,6 +167,14 @@ export default function App() {
               <option key={d} value={d}>{d === "all" ? "All Diets" : d[0].toUpperCase() + d.slice(1)}</option>
             ))}
           </select>
+          <button
+            className="btn btn-refresh"
+            onClick={handleRefreshAll}
+            disabled={anyLoading}
+            title="Re-fetch insights, recipes, and clusters using the current filters"
+          >
+            {refreshing ? "Refreshing…" : "⟳ Refresh All Data"}
+          </button>
         </div>
 
         <h2 className="section-title">API Data Interaction</h2>
@@ -127,8 +193,11 @@ export default function App() {
         {errorMsg && (
           <p className="meta-note" style={{ color: "#c0392b" }}>Error: {errorMsg}</p>
         )}
-        {lastExecTime !== null && !errorMsg && (
-          <p className="meta-note">Last function execution time: {lastExecTime}ms</p>
+        {lastExecTime !== null && (
+          <p className="meta-note">
+            Last function execution time: {lastExecTime}ms
+            {lastUpdated && ` · Last updated: ${lastUpdated.toLocaleTimeString()}`}
+          </p>
         )}
 
         <h2 className="section-title">Pagination</h2>
