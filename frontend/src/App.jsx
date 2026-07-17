@@ -140,7 +140,7 @@ export default function App() {
   const anyLoading = loading.insights || loading.recipes || loading.clusters;
 
   return (
-    <div>
+    <div className="app-shell">
       <header className="header">
         <h1>Nutritional Insights</h1>
       </header>
