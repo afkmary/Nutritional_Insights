@@ -4,6 +4,7 @@ const { loadDietData } = require("../../shared/dietData");
 // GET /api/insights?diet=keto
 // Powers: Bar Chart (avg macros per diet type), Scatter Plot (protein vs carbs),
 // and Heatmap (nutrient correlations) on the dashboard.
+
 app.http("GetNutritionalInsights", {
   methods: ["GET"],
   authLevel: "anonymous",

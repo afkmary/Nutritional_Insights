@@ -2,8 +2,8 @@ const { app } = require("@azure/functions");
 const { loadDietData } = require("../../shared/dietData");
 
 // GET /api/recipes?diet=keto&search=chicken&page=1&pageSize=10
-// Powers: Pie Chart (recipe distribution by diet type), Search/Filter controls,
-// and Pagination on the dashboard.
+// Powers: Pie Chart (recipe distribution by diet type), Search/Filter controls, pagination
+
 app.http("GetRecipes", {
   methods: ["GET"],
   authLevel: "anonymous",
@@ -26,8 +26,7 @@ app.http("GetRecipes", {
         filtered = filtered.filter((r) => r.recipeName.toLowerCase().includes(s));
       }
 
-      // Pie chart: recipe distribution by diet type (respects search, ignores the
-      // diet dropdown so the pie stays meaningful as a "distribution" view)
+      // Pie chart: recipe distribution by diet type 
       const distributionSource = search
         ? rows.filter((r) => r.recipeName.toLowerCase().includes(search.toLowerCase()))
         : rows;

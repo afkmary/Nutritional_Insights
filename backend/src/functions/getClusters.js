@@ -4,7 +4,7 @@ const { loadDietData } = require("../../shared/dietData");
 // GET /api/clusters?diet=keto&k=3
 // Powers: "Get Clusters" button - groups recipes into k clusters based on
 // protein/carbs/fat similarity using a lightweight k-means implementation
-// (no external ML library needed, keeps cold starts fast).
+
 app.http("GetClusters", {
   methods: ["GET"],
   authLevel: "anonymous",

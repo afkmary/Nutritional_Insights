@@ -3,7 +3,7 @@ import React from "react";
 const FIELDS = ["protein", "carbs", "fat"];
 
 // Map a correlation value (-1 to 1) to a pastel color intensity
-// Positive correlations -> lilac, negative -> peach, both softened
+// Positive correlations -> lilac, negative -> peach
 function colorFor(value) {
   const intensity = Math.abs(value);
   const r = value >= 0 ? 201 : 255;
