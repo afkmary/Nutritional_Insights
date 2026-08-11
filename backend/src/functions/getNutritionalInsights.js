@@ -1,9 +1,13 @@
 const { app } = require("@azure/functions");
-const { loadDietData } = require("../../shared/dietData");
+const { getContainer } = require("../../shared/cosmosClient");
 
 // GET /api/insights?diet=keto
-// Powers: Bar Chart (avg macros per diet type), Scatter Plot (protein vs carbs),
-// and Heatmap (nutrient correlations) on the dashboard.
+// Powers: Bar Chart, Scatter Plot, Heatmap.
+//
+// Phase 3: this is now a PURE Cosmos read. All cleaning/aggregation math
+// happens once in onDietsCsvChange (the blob-trigger ETL) — this handler
+// just fetches the 3 precomputed docs and picks out the requested diet
+// slice. No CSV parsing, no pandas-equivalent logic, no blob access here.
 
 app.http("GetNutritionalInsights", {
   methods: ["GET"],
@@ -12,39 +16,19 @@ app.http("GetNutritionalInsights", {
   handler: async (request, context) => {
     const start = Date.now();
     try {
-      const rows = await loadDietData();
-      const dietFilter = request.query.get("diet");
+      const dietKey = (request.query.get("diet") || "all").toLowerCase();
+      const container = getContainer("results");
 
-      const filtered = dietFilter
-        ? rows.filter((r) => r.dietType.toLowerCase() === dietFilter.toLowerCase())
-        : rows;
+      const [{ resource: barDoc }, { resource: scatterDoc }, { resource: heatmapDoc }] =
+        await Promise.all([
+          container.item("bar", "bar").read(),
+          container.item("scatter", "scatter").read(),
+          container.item("heatmap", "heatmap").read()
+        ]);
 
-      // --- Bar chart data: average macros per diet type ---
-      const groups = {};
-      for (const r of filtered) {
-        if (!groups[r.dietType]) {
-          groups[r.dietType] = { protein: 0, carbs: 0, fat: 0, count: 0 };
-        }
-        groups[r.dietType].protein += r.protein;
-        groups[r.dietType].carbs += r.carbs;
-        groups[r.dietType].fat += r.fat;
-        groups[r.dietType].count += 1;
-      }
-      const insights = Object.entries(groups).map(([dietType, g]) => ({
-        dietType,
-        avgProtein: +(g.protein / g.count).toFixed(2),
-        avgCarbs: +(g.carbs / g.count).toFixed(2),
-        avgFat: +(g.fat / g.count).toFixed(2),
-        recipeCount: g.count
-      }));
-
-      // --- Scatter plot data: protein vs carbs (sampled to keep payload small) ---
-      const scatterSample = filtered
-        .slice(0, 500)
-        .map((r) => ({ dietType: r.dietType, protein: r.protein, carbs: r.carbs, fat: r.fat }));
-
-      // --- Heatmap data: correlation matrix between protein/carbs/fat ---
-      const correlation = buildCorrelationMatrix(filtered);
+      const insights = pickDiet(barDoc?.byDiet, dietKey) || [];
+      const scatterSample = pickDiet(scatterDoc?.byDiet, dietKey) || [];
+      const correlation = pickDiet(heatmapDoc?.byDiet, dietKey) || {};
 
       return {
         jsonBody: {
@@ -61,31 +45,8 @@ app.http("GetNutritionalInsights", {
   }
 });
 
-function buildCorrelationMatrix(rows) {
-  const fields = ["protein", "carbs", "fat"];
-  const n = rows.length;
-  if (n === 0) return {};
-
-  const means = {};
-  for (const f of fields) {
-    means[f] = rows.reduce((sum, r) => sum + r[f], 0) / n;
-  }
-
-  const matrix = {};
-  for (const a of fields) {
-    matrix[a] = {};
-    for (const b of fields) {
-      let num = 0, denA = 0, denB = 0;
-      for (const r of rows) {
-        const da = r[a] - means[a];
-        const db = r[b] - means[b];
-        num += da * db;
-        denA += da * da;
-        denB += db * db;
-      }
-      const corr = denA && denB ? num / Math.sqrt(denA * denB) : 0;
-      matrix[a][b] = +corr.toFixed(3);
-    }
-  }
-  return matrix;
+/** byDiet keys are lowercase diet types (see dietProcessing.parseAndCleanCsv), so this is an exact lookup. */
+function pickDiet(byDiet, dietKey) {
+  if (!byDiet) return undefined;
+  return byDiet[dietKey] ?? byDiet.all;
 }

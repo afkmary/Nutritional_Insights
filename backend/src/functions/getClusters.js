@@ -1,9 +1,16 @@
 const { app } = require("@azure/functions");
-const { loadDietData } = require("../../shared/dietData");
+const { getContainer } = require("../../shared/cosmosClient");
 
 // GET /api/clusters?diet=keto&k=3
-// Powers: "Get Clusters" button - groups recipes into k clusters based on
-// protein/carbs/fat similarity using a lightweight k-means implementation
+// Powers: "Get Clusters" button — groups recipes into k clusters based on
+// protein/carbs/fat similarity using a lightweight k-means implementation.
+//
+// Phase 3: rows now come from the `recipes` Cosmos container (populated by
+// onDietsCsvChange), not the CSV blob. There is no CSV/blob access left in
+// this handler. k-means itself still runs per-request because k is an
+// arbitrary user input that can't be fully precomputed ahead of time — but
+// it now runs against a small, already-cleaned, indexed Cosmos read instead
+// of re-parsing the whole dataset from blob storage on every call.
 
 app.http("GetClusters", {
   methods: ["GET"],
@@ -12,21 +19,16 @@ app.http("GetClusters", {
   handler: async (request, context) => {
     const start = Date.now();
     try {
-      const rows = await loadDietData();
-      const dietFilter = request.query.get("diet");
+      const dietFilter = (request.query.get("diet") || "").toLowerCase() || null;
       const k = parseInt(request.query.get("k")) || 3;
+      const SAMPLE_LIMIT = 1000;
 
-      const filtered = dietFilter
-        ? rows.filter((r) => r.dietType.toLowerCase() === dietFilter.toLowerCase())
-        : rows;
+      const rows = await loadRowsFromCosmos(dietFilter, SAMPLE_LIMIT);
 
-      // Sample for performance on large datasets
-      const sample = filtered.length > 1000 ? filtered.slice(0, 1000) : filtered;
-      const points = sample.map((r) => [r.protein, r.carbs, r.fat]);
-
+      const points = rows.map((r) => [r.protein, r.carbs, r.fat]);
       const { assignments, centroids } = kmeans(points, Math.min(k, points.length || 1));
 
-      const clusters = sample.map((r, i) => ({
+      const clusters = rows.map((r, i) => ({
         recipeName: r.recipeName,
         dietType: r.dietType,
         protein: r.protein,
@@ -53,6 +55,40 @@ app.http("GetClusters", {
     }
   }
 });
+
+async function loadRowsFromCosmos(dietFilter, limit) {
+  const container = getContainer("recipes");
+
+  if (dietFilter) {
+    const query = {
+      query: "SELECT TOP @limit c.name, c.dietType, c.protein, c.carbs, c.fat FROM c WHERE c.dietType = @diet",
+      parameters: [
+        { name: "@limit", value: limit },
+        { name: "@diet", value: dietFilter }
+      ]
+    };
+    const { resources } = await container.items
+      .query(query, { partitionKey: dietFilter })
+      .fetchAll();
+    return resources.map(normalize);
+  }
+
+  // No diet filter: cross-partition query, still capped for performance.
+  const query = { query: "SELECT TOP @limit c.name, c.dietType, c.protein, c.carbs, c.fat FROM c" };
+  query.parameters = [{ name: "@limit", value: limit }];
+  const { resources } = await container.items.query(query).fetchAll();
+  return resources.map(normalize);
+}
+
+function normalize(doc) {
+  return {
+    recipeName: doc.name,
+    dietType: doc.dietType,
+    protein: doc.protein,
+    carbs: doc.carbs,
+    fat: doc.fat
+  };
+}
 
 function kmeans(points, k, iterations = 15) {
   if (points.length === 0) return { assignments: [], centroids: [] };
