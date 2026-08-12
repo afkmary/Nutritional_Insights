@@ -1,9 +1,6 @@
-// Base URL of the deployed Azure Function (Person A's backend).
-// This is the ONE line that needs to change if the function URL ever changes.
-//
 // For local development against `func start`, switch this to:
 //   "http://localhost:7071/api"
-export const FUNCTION_BASE_URL = "http://localhost:7071/api";
+export const FUNCTION_BASE_URL = "https://diet-analysis-func-marya.azurewebsites.net/api";
 
 // --- session token -------------------------------------------------------
 // Held in a module variable rather than localStorage. AuthContext is the only
