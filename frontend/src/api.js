@@ -1,6 +1,7 @@
 // For local development against `func start`, switch this to:
 //   "http://localhost:7071/api"
-export const FUNCTION_BASE_URL = "https://diet-analysis-func-marya.azurewebsites.net/api";
+export const FUNCTION_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "https://diet-analysis-func-marya.azurewebsites.net/api";
 
 // --- session token -------------------------------------------------------
 // Held in a module variable rather than localStorage. AuthContext is the only
