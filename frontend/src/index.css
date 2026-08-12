@@ -292,3 +292,273 @@ h3,
   color: var(--text-muted);
   text-transform: capitalize;
 }
+
+/* ==========================================================================
+   Phase 3 — dashboard extras (Security & Compliance, OAuth & 2FA, Cleanup)
+   Append to the END of frontend/src/index.css, after the auth styles.
+   ========================================================================== */
+
+.extras-card {
+  margin-bottom: 8px;
+}
+
+.status-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.status-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+
+.status-list li:last-child {
+  border-bottom: none;
+}
+
+.status-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.status-ok {
+  font-weight: 700;
+  color: #2f7d5c;
+}
+
+.status-detail {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.extras-note {
+  margin: 0 0 14px;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+.extras-caption {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.oauth-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-oauth {
+  background: var(--sky);
+  color: var(--text);
+}
+
+.btn-cleanup {
+  background: var(--coral);
+  color: #7a2f28;
+}
+
+.extras-field {
+  display: block;
+  margin-top: 18px;
+  max-width: 340px;
+}
+
+.extras-field span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.extras-field input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+}
+
+.extras-field input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Phase 3 — auth styles
+   Append this to the END of frontend/src/index.css.
+   Uses the existing :root variables (--lilac, --mint, --text, etc.) so the
+   login screen matches the dashboard.
+   ========================================================================== */
+
+/* --- login / register screen --- */
+
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(140deg, var(--mint) 0%, var(--lilac) 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 36px 32px;
+}
+
+.auth-title {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.auth-subtitle {
+  margin: 0 0 24px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.auth-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.auth-field span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.auth-field input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.auth-field input:focus {
+  border-color: var(--lilac-dark);
+}
+
+.auth-error {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  font-size: 0.87rem;
+  color: #8a3a34;
+  background: var(--coral);
+  border-radius: 10px;
+}
+
+.auth-submit {
+  width: 100%;
+  background: var(--lilac-dark);
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.auth-github {
+  width: 100%;
+  background: var(--text);
+  color: #fff;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.auth-switch {
+  margin: 22px 0 0;
+  text-align: center;
+  font-size: 0.87rem;
+  color: var(--text-muted);
+}
+
+.auth-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--lilac-dark);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.auth-checking {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* --- header user badge (logged-in name + logout) --- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-user-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.btn-logout {
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--text);
+}
+
+@media (max-width: 520px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
