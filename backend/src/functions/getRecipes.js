@@ -2,17 +2,6 @@ const { app } = require("@azure/functions");
 const { getContainer } = require("../../shared/cosmosClient");
 const { requireAuth } = require("../../shared/auth");
 
-// GET /api/recipes?diet=keto&q=chicken&page=1&pageSize=10
-// Powers: Pie Chart, search/filter controls, pagination.
-//
-// Phase 3: this is a live Cosmos SQL query (not a precomputed doc) because
-// diet/search/page are arbitrary per-request inputs. It reads from the
-// `recipes` container populated by onDietsCsvChange — there is no CSV/blob
-// access or pandas-equivalent logic in this handler.
-//
-// Accepts `q` (per spec) and also `search` (legacy alias so the existing
-// frontend contract in api.js keeps working without a frontend change).
-
 app.http("GetRecipes", {
   methods: ["GET"],
   authLevel: "anonymous",

@@ -1,9 +1,5 @@
 const { CosmosClient } = require("@azure/cosmos");
 
-// Singleton Cosmos client + container handles, reused across function
-// invocations on a warm instance (this is itself a caching optimization —
-// avoids re-establishing the client/connection on every request).
-
 let client = null;
 let database = null;
 const containers = {};

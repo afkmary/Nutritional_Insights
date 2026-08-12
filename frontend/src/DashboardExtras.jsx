@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "./AuthContext.jsx";
 
-/**
- * Sections from the instructor's "UI-for-Project 3" reference:
- * Security & Compliance, OAuth & 2FA Integration, Cloud Resource Cleanup.
- *
- * Where the reference shows a value, this reads the real one from app state
- * rather than hardcoding it — so anything on screen can be backed up if asked
- * about it during the presentation.
- */
 export default function DashboardExtras() {
   const { user } = useAuth();
   const [twoFactorCode, setTwoFactorCode] = useState("");

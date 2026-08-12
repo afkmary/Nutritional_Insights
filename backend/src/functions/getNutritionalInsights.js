@@ -2,14 +2,6 @@ const { app } = require("@azure/functions");
 const { getContainer } = require("../../shared/cosmosClient");
 const { requireAuth } = require("../../shared/auth");
 
-// GET /api/insights?diet=keto
-// Powers: Bar Chart, Scatter Plot, Heatmap.
-//
-// Phase 3: this is now a PURE Cosmos read. All cleaning/aggregation math
-// happens once in onDietsCsvChange (the blob-trigger ETL) — this handler
-// just fetches the 3 precomputed docs and picks out the requested diet
-// slice. No CSV parsing, no pandas-equivalent logic, no blob access here.
-
 app.http("GetNutritionalInsights", {
   methods: ["GET"],
   authLevel: "anonymous",

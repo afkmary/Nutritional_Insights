@@ -1,25 +1,19 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { FUNCTION_BASE_URL, setAuthToken } from "./api.js";
 
-// Session state lives in React state, not localStorage. A refresh logs you
-// out — acceptable for this project, and it keeps the token out of any
-// storage an XSS could read.
+// Session state lives in React state, not localStorage.
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [checking, setChecking] = useState(true);
 
-  // On mount: pick up a token left in the URL fragment by the OAuth callback
-  // redirect (…/auth/callback#token=eyJ…), then verify it with /auth/me.
   useEffect(() => {
     const hash = window.location.hash || "";
     const params = new URLSearchParams(hash.replace(/^#/, ""));
     const token = params.get("token");
     const oauthError = params.get("error");
 
-    // Clear the fragment so the token isn't left sitting in the address bar
-    // or copied into a bookmark.
     if (token || oauthError) {
       window.history.replaceState({}, "", window.location.pathname);
     }

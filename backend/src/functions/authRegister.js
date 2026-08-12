@@ -37,8 +37,6 @@ app.http("AuthRegister", {
         return json(409, { error: "An account with that email already exists." });
       }
 
-      // The plaintext password exists only here, in memory, for the length of
-      // this request. Only the hash is ever written to Cosmos.
       const passwordHash = await bcrypt.hash(password, BCRYPT_COST);
 
       const user = {

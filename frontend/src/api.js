@@ -4,9 +4,6 @@ export const FUNCTION_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "https://diet-analysis-func-marya.azurewebsites.net/api";
 
 // --- session token -------------------------------------------------------
-// Held in a module variable rather than localStorage. AuthContext is the only
-// thing that sets it; every request below picks it up automatically, so there
-// is exactly one place that knows how a request is authenticated.
 
 let authToken = null;
 let onUnauthorized = null;
@@ -30,8 +27,7 @@ async function getJson(url) {
   const res = await fetch(url, { headers: authHeaders() });
 
   if (res.status === 401) {
-    // Token expired or missing — drop the session so the app falls back to
-    // the login screen instead of showing an empty dashboard.
+    // Token expired or missing 
     authToken = null;
     if (onUnauthorized) onUnauthorized();
     throw new Error("Your session has expired. Please log in again.");
@@ -69,7 +65,6 @@ export async function fetchClusters(diet, k = 3) {
 
 // --- auth ----------------------------------------------------------------
 
-/** Shared POST helper that surfaces the API's own error message. */
 async function postAuth(path, body) {
   const res = await fetch(`${FUNCTION_BASE_URL}${path}`, {
     method: "POST",
@@ -92,7 +87,6 @@ export function login({ email, password }) {
   return postAuth("/auth/login", { email, password });
 }
 
-/** Full page navigation — the OAuth flow needs real browser redirects. */
 export function startGithubLogin() {
   window.location.href = `${FUNCTION_BASE_URL}/auth/github/start`;
 }

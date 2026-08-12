@@ -2,16 +2,6 @@ const { app } = require("@azure/functions");
 const { getUsersContainer, findUserById } = require("../../shared/cosmos");
 const { signToken } = require("../../shared/auth");
 
-// GET /api/auth/github/callback?code=...&state=...
-//
-// Step 2 of the OAuth authorization-code flow.
-//
-// GitHub redirects the browser back here with a one-time `code`. We swap that
-// code for an access token server-side (the client secret never touches the
-// browser), read the profile, then issue OUR OWN JWT — the same token shape
-// the email/password path produces, so the React app has one session model
-// regardless of how the user signed in.
-
 function redirectToApp(fragment) {
   return {
     status: 302,

@@ -34,21 +34,6 @@ function verifyRequest(request) {
   }
 }
 
-/**
- * --- FOR PERSON A ---
- * Drop this at the top of getRecipes / getNutritionalInsights / getClusters:
- *
- *   const { requireAuth } = require("../../shared/auth");
- *   ...
- *   handler: async (request, context) => {
- *     const denied = requireAuth(request);
- *     if (denied) return denied;
- *     ...existing code unchanged...
- *   }
- *
- * Returns null when the caller is authenticated (carry on), or a ready-made
- * 401 response object when they are not.
- */
 function requireAuth(request) {
   const claims = verifyRequest(request);
   if (!claims) {

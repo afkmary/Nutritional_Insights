@@ -1,8 +1,3 @@
-#!/usr/bin/env bash
-# Wires an Event Grid subscription so onDietsCsvChange fires within seconds
-# of an upload, instead of the classic blob trigger's up-to-10-minute poll
-# on a Consumption plan. Run this AFTER `func azure functionapp publish`.
-#
 # Usage:
 #   RESOURCE_GROUP=diet-analysis-rg STORAGE_ACCOUNT=dietanalysisstorage77 \
 #     FUNCTION_APP=diet-analysis-func-marya ./scripts/setup-event-grid.sh

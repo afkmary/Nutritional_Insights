@@ -5,8 +5,6 @@ import LoginPage from "./LoginPage.jsx";
 import { AuthProvider, useAuth } from "./AuthContext.jsx";
 import "./index.css";
 
-// The gate. No react-router needed — the app has exactly two states, so a
-// conditional render is simpler than a route table and easier to demo.
 function Root() {
   const { user, checking } = useAuth();
 

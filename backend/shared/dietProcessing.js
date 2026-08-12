@@ -5,7 +5,6 @@ const ALL_KEY = "all";
 
 /**
  * Parse raw CSV text into normalized recipe rows.
- * (Same normalization Phase 2 used in shared/dietData.js.)
  */
 function parseAndCleanCsv(csvText) {
   const records = parse(csvText, {
@@ -16,9 +15,7 @@ function parseAndCleanCsv(csvText) {
 
   const rows = [];
   for (const r of records) {
-    // Lowercased: the frontend dropdown and every downstream Cosmos query
-    // use lowercase diet keys ("keto", "paleo", ...), and Cosmos exact-match
-    // / partition-key lookups are case-sensitive, so normalize here once.
+
     const dietType = (r.Diet_type || "").trim().toLowerCase();
     const recipeName = (r.Recipe_name || "").trim();
 
@@ -39,8 +36,7 @@ function parseAndCleanCsv(csvText) {
 
 /** Deterministic id for a recipe doc, stable across re-runs of the ETL. */
 function recipeId(row, index) {
-  // dietType is the partition key, so the id only needs to be unique
-  // *within* that partition. Index is stable given a stable CSV row order.
+
   const safeName = row.recipeName
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -54,7 +50,7 @@ function average(nums) {
 }
 
 function buildBarPayload(rowsByDiet) {
-  // One entry per diet type present in this slice (matches Phase 2 shape).
+  // One entry per diet type present in this slice
   const build = (rows) => {
     const groups = {};
     for (const r of rows) {

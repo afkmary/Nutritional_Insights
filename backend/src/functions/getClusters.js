@@ -2,17 +2,6 @@ const { app } = require("@azure/functions");
 const { getContainer } = require("../../shared/cosmosClient");
 const { requireAuth } = require("../../shared/auth");
 
-// GET /api/clusters?diet=keto&k=3
-// Powers: "Get Clusters" button — groups recipes into k clusters based on
-// protein/carbs/fat similarity using a lightweight k-means implementation.
-//
-// Phase 3: rows now come from the `recipes` Cosmos container (populated by
-// onDietsCsvChange), not the CSV blob. There is no CSV/blob access left in
-// this handler. k-means itself still runs per-request because k is an
-// arbitrary user input that can't be fully precomputed ahead of time — but
-// it now runs against a small, already-cleaned, indexed Cosmos read instead
-// of re-parsing the whole dataset from blob storage on every call.
-
 app.http("GetClusters", {
   methods: ["GET"],
   authLevel: "anonymous",

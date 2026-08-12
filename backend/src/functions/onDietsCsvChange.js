@@ -8,8 +8,8 @@ const { parseAndCleanCsv, recipeId, computeChartPayloads } = require("../../shar
 // blob trigger) so it fires within seconds of an upload instead of the
 // classic trigger's up-to-10-minute polling delay on a Consumption plan.
 //
-// Path pattern matches diet-data/All_Diets.csv specifically — uploads of
-// anything else in that container do not fire this function.
+// Path pattern matches diet-data/All_Diets.csv specifically
+// Uploads of anything else in that container do not fire this function.
 // ---------------------------------------------------------------------------
 app.storageBlob("onDietsCsvChange", {
   path: "diet-data/All_Diets.csv",
@@ -69,7 +69,6 @@ app.storageBlob("onDietsCsvChange", {
   }
 });
 
-/** Upsert with limited concurrency so we don't blow past Cosmos RU throughput. */
 async function upsertRecipes(container, rows, runId, context, concurrency = 20) {
   let i = 0;
   let inFlight = 0;

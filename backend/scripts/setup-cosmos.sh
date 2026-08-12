@@ -1,7 +1,3 @@
-#!/usr/bin/env bash
-# Creates the Phase 3 Cosmos DB account (serverless, free tier), database,
-# and the 3 containers. Idempotent — safe to re-run.
-#
 # Usage:
 #   RESOURCE_GROUP=diet-analysis-rg COSMOS_ACCOUNT=dietanalysis-cosmos LOCATION=eastus \
 #     ./scripts/setup-cosmos.sh

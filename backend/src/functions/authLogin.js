@@ -3,8 +3,6 @@ const bcrypt = require("bcryptjs");
 const { findUserById } = require("../../shared/cosmos");
 const { signToken, json, publicUser } = require("../../shared/auth");
 
-// Deliberately identical for "no such user" and "wrong password" so this
-// endpoint can't be used to discover which emails have accounts.
 const BAD_CREDENTIALS = { error: "Incorrect email or password." };
 
 // POST /api/auth/login  { email, password }

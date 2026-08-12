@@ -1,15 +1,6 @@
 const { app } = require("@azure/functions");
 const crypto = require("crypto");
 
-// GET /api/auth/github/start
-//
-// Step 1 of the OAuth authorization-code flow. The browser hits this URL and
-// we bounce it to GitHub's consent screen.
-//
-// The random `state` value goes into an HttpOnly cookie and is echoed back by
-// GitHub in step 2. Comparing them is what stops an attacker from replaying a
-// stolen callback URL — worth saying out loud in the video.
-
 app.http("AuthGithubStart", {
   methods: ["GET"],
   authLevel: "anonymous",

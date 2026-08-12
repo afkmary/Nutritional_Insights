@@ -1,10 +1,4 @@
-// One-off local ETL run: does exactly what onDietsCsvChange does, but invoked
-// by hand instead of by an Event Grid blob event (which only fires in Azure).
-//
 // Use this to populate Cosmos so the dashboard has data during local dev.
-//
-// Usage, from the backend/ folder:
-//   node scripts/seed-cosmos.js data/All_Diets.csv
 
 const fs = require("fs");
 const path = require("path");
