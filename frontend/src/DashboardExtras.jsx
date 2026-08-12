@@ -59,15 +59,7 @@ export default function DashboardExtras() {
           <button className="btn btn-oauth" disabled title="Not configured for this project">
             Login with Google
           </button>
-          <button
-            className="btn btn-oauth"
-            disabled={user.provider === "github"}
-            title={
-              user.provider === "github"
-                ? "Already signed in with GitHub"
-                : "Log out first to sign in with GitHub"
-            }
-          >
+          <button className="btn btn-oauth" disabled title="Log out to sign in with GitHub">
             Login with GitHub
           </button>
         </div>

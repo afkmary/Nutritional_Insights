@@ -7,7 +7,6 @@ import { fetchInsights, fetchRecipes, fetchClusters } from "./api.js";
 import { useAuth } from "./AuthContext.jsx";
 import DashboardExtras from "./DashboardExtras.jsx";
 
-
 const DIET_TYPES = ["all", "keto", "paleo", "vegan", "mediterranean", "dash"];
 const PAGE_SIZE = 10;
 
@@ -200,6 +199,8 @@ export default function App() {
             Get Clusters
           </button>
         </div>
+
+        <DashboardExtras />
 
         {errorMsg && (
           <p className="meta-note" style={{ color: "#c0392b" }}>Error: {errorMsg}</p>
