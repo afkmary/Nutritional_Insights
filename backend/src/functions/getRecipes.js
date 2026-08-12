@@ -1,5 +1,6 @@
 const { app } = require("@azure/functions");
 const { getContainer } = require("../../shared/cosmosClient");
+const { requireAuth } = require("../../shared/auth");
 
 // GET /api/recipes?diet=keto&q=chicken&page=1&pageSize=10
 // Powers: Pie Chart, search/filter controls, pagination.
@@ -17,6 +18,8 @@ app.http("GetRecipes", {
   authLevel: "anonymous",
   route: "recipes",
   handler: async (request, context) => {
+    const denied = requireAuth(request);
+    if (denied) return denied;
     const start = Date.now();
     try {
       const diet = (request.query.get("diet") || "").toLowerCase() || null;

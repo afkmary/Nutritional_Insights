@@ -1,5 +1,6 @@
 const { app } = require("@azure/functions");
 const { getContainer } = require("../../shared/cosmosClient");
+const { requireAuth } = require("../../shared/auth");
 
 // GET /api/insights?diet=keto
 // Powers: Bar Chart, Scatter Plot, Heatmap.
@@ -14,6 +15,8 @@ app.http("GetNutritionalInsights", {
   authLevel: "anonymous",
   route: "insights",
   handler: async (request, context) => {
+    const denied = requireAuth(request);
+    if (denied) return denied;
     const start = Date.now();
     try {
       const dietKey = (request.query.get("diet") || "all").toLowerCase();

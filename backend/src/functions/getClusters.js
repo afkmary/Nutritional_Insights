@@ -1,5 +1,6 @@
 const { app } = require("@azure/functions");
 const { getContainer } = require("../../shared/cosmosClient");
+const { requireAuth } = require("../../shared/auth");
 
 // GET /api/clusters?diet=keto&k=3
 // Powers: "Get Clusters" button — groups recipes into k clusters based on
@@ -17,6 +18,8 @@ app.http("GetClusters", {
   authLevel: "anonymous",
   route: "clusters",
   handler: async (request, context) => {
+    const denied = requireAuth(request);
+    if (denied) return denied;
     const start = Date.now();
     try {
       const dietFilter = (request.query.get("diet") || "").toLowerCase() || null;
