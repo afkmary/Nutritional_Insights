@@ -4,6 +4,8 @@ import ScatterChartCard from "./components/ScatterChartCard.jsx";
 import HeatmapCard from "./components/HeatmapCard.jsx";
 import PieChartCard from "./components/PieChartCard.jsx";
 import { fetchInsights, fetchRecipes, fetchClusters } from "./api.js";
+import { useAuth } from "./AuthContext.jsx";
+import DashboardExtras from "./DashboardExtras.jsx";
 
 const DIET_TYPES = ["all", "keto", "paleo", "vegan", "mediterranean", "dash"];
 const PAGE_SIZE = 10;
@@ -24,6 +26,8 @@ function getPageNumbers(current, total) {
 }
 
 export default function App() {
+  const { user, logout } = useAuth();
+
   const [search, setSearch] = useState("");
   const [dietType, setDietType] = useState("keto");
 
@@ -143,6 +147,12 @@ export default function App() {
     <div className="app-shell">
       <header className="header">
         <h1>Nutritional Insights</h1>
+        <div className="header-user">
+          <span className="header-user-name">{user.displayName}</span>
+          <button className="btn btn-logout" onClick={logout}>
+            Log out
+          </button>
+        </div>
       </header>
 
       <main className="main">
@@ -189,6 +199,8 @@ export default function App() {
             Get Clusters
           </button>
         </div>
+
+        <DashboardExtras />
 
         {errorMsg && (
           <p className="meta-note" style={{ color: "#c0392b" }}>Error: {errorMsg}</p>

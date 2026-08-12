@@ -1,3 +1,24 @@
+/* ==========================================================================
+   Nutritional Insights — stylesheet
+   --------------------------------------------------------------------------
+   1.  Fonts & theme variables
+   2.  Base / reset
+   3.  Layout shell (header, main, footer)
+   4.  Cards & chart grid
+   5.  Buttons
+   6.  Filters & pagination
+   7.  Heatmap
+   8.  Auth — login / register screen
+   9.  Auth — header user badge
+   10. Dashboard extras — Security, OAuth & 2FA, Cleanup
+   11. Responsive
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. Fonts & theme variables
+   ========================================================================== */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
@@ -14,6 +35,11 @@
   --border: #ECE7F9;
   --shadow: 0 4px 16px rgba(120, 100, 180, 0.08);
 }
+
+
+/* ==========================================================================
+   2. Base / reset
+   ========================================================================== */
 
 * {
   box-sizing: border-box;
@@ -32,12 +58,6 @@ body {
   color: var(--text);
 }
 
-.app-shell {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 h1,
 h2,
 h3,
@@ -45,10 +65,27 @@ h3,
   font-family: "Poppins", "Inter", sans-serif;
 }
 
+
+/* ==========================================================================
+   3. Layout shell
+   ========================================================================== */
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Flex row so the logged-in user badge sits opposite the title.
+   (Merged here from what used to be a second .header rule further down.) */
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px 32px;
   background: linear-gradient(120deg, var(--mint) 0%, var(--lilac) 100%);
   color: var(--text);
-  padding: 28px 32px;
 }
 
 .header h1 {
@@ -72,6 +109,20 @@ h3,
   margin: 0 0 16px 0;
   color: var(--text);
 }
+
+.footer {
+  background: linear-gradient(120deg, var(--lilac) 0%, var(--mint) 100%);
+  color: var(--text);
+  text-align: center;
+  padding: 22px;
+  font-size: 0.85rem;
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* ==========================================================================
+   4. Cards & chart grid
+   ========================================================================== */
 
 .chart-grid {
   display: grid;
@@ -115,6 +166,80 @@ h3,
   min-height: 0;
 }
 
+.empty-state {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+
+/* ==========================================================================
+   5. Buttons
+   ========================================================================== */
+
+.btn {
+  padding: 11px 22px;
+  border: none;
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(120, 100, 180, 0.18);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.api-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.btn-insights {
+  background: var(--lilac);
+}
+
+.btn-recipes {
+  background: var(--mint);
+}
+
+.btn-clusters {
+  background: var(--peach);
+}
+
+/* Inherits .btn in the markup, so only the differences are needed here. */
+.btn-refresh {
+  background: var(--sky);
+  padding: 11px 20px;
+  white-space: nowrap;
+}
+
+.meta-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: -28px;
+  margin-bottom: 32px;
+}
+
+
+/* ==========================================================================
+   6. Filters & pagination
+   ========================================================================== */
+
 .filters-row {
   display: flex;
   gap: 12px;
@@ -143,78 +268,6 @@ h3,
   min-width: 220px;
 }
 
-.api-buttons {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  padding: 11px 22px;
-  border: none;
-  border-radius: 999px;
-  color: var(--text);
-  font-size: 0.88rem;
-  font-weight: 600;
-  font-family: "Poppins", sans-serif;
-  cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-
-.btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(120, 100, 180, 0.18);
-}
-
-.btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.btn-insights {
-  background: var(--lilac);
-}
-
-.btn-recipes {
-  background: var(--mint);
-}
-
-.btn-clusters {
-  background: var(--peach);
-}
-
-.btn-refresh {
-  background: var(--sky);
-  padding: 11px 20px;
-  border: none;
-  border-radius: 999px;
-  color: var(--text);
-  font-size: 0.88rem;
-  font-weight: 600;
-  font-family: "Poppins", sans-serif;
-  cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-  white-space: nowrap;
-}
-
-.btn-refresh:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(120, 100, 180, 0.18);
-}
-
-.btn-refresh:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.meta-note {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-top: -28px;
-  margin-bottom: 32px;
-}
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -240,33 +293,20 @@ h3,
   font-weight: 600;
 }
 
-.page-ellipsis {
-  padding: 8px 4px;
-  color: var(--text-muted);
-}
-
 .page-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.footer {
-  background: linear-gradient(120deg, var(--lilac) 0%, var(--mint) 100%);
-  color: var(--text);
-  text-align: center;
-  padding: 22px;
-  font-size: 0.85rem;
-  font-family: "Poppins", sans-serif;
+.page-ellipsis {
+  padding: 8px 4px;
+  color: var(--text-muted);
 }
 
-.empty-state {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
+
+/* ==========================================================================
+   7. Heatmap
+   ========================================================================== */
 
 .heatmap-grid {
   display: grid;
@@ -291,4 +331,295 @@ h3,
   font-weight: 600;
   color: var(--text-muted);
   text-transform: capitalize;
+}
+
+
+/* ==========================================================================
+   8. Auth — login / register screen
+   Shown by main.jsx when there is no signed-in user.
+   ========================================================================== */
+
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(140deg, var(--mint) 0%, var(--lilac) 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 36px 32px;
+}
+
+.auth-title {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.auth-subtitle {
+  margin: 0 0 24px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.auth-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.auth-field span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.auth-field input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.auth-field input:focus {
+  border-color: var(--lilac-dark);
+}
+
+.auth-error {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  font-size: 0.87rem;
+  color: #8a3a34;
+  background: var(--coral);
+  border-radius: 10px;
+}
+
+.auth-submit {
+  width: 100%;
+  background: var(--lilac-dark);
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.auth-github {
+  width: 100%;
+  background: var(--text);
+  color: #fff;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.auth-switch {
+  margin: 22px 0 0;
+  text-align: center;
+  font-size: 0.87rem;
+  color: var(--text-muted);
+}
+
+.auth-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--lilac-dark);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.auth-checking {
+  color: var(--text);
+  font-weight: 600;
+}
+
+
+/* ==========================================================================
+   9. Auth — header user badge
+   Logged-in name + logout button, top right of the dashboard header.
+   ========================================================================== */
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-user-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.btn-logout {
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--text);
+}
+
+
+/* ==========================================================================
+   10. Dashboard extras
+   Security & Compliance, OAuth & 2FA, Cloud Resource Cleanup
+   (sections from the instructor's UI-for-Project 3 reference)
+   ========================================================================== */
+
+/* Full-width panels rather than grid tiles, so the 320px chart-card floor
+   doesn't leave a block of empty space under the content. */
+.extras-card {
+  min-height: 0;
+  margin-bottom: 28px;
+}
+
+.extras-card:hover {
+  transform: none;
+  box-shadow: var(--shadow);
+}
+
+/* --- Security status list --- */
+
+.status-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.status-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+
+.status-list li:last-child {
+  border-bottom: none;
+}
+
+.status-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.status-ok {
+  font-weight: 700;
+  color: #2f7d5c;
+}
+
+.status-detail {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* --- Shared text bits --- */
+
+.extras-note {
+  margin: 0 0 14px;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+.extras-caption {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* --- OAuth & 2FA --- */
+
+.oauth-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-oauth {
+  background: var(--sky);
+  color: var(--text);
+}
+
+.extras-field {
+  display: block;
+  margin-top: 18px;
+  max-width: 340px;
+}
+
+.extras-field span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.extras-field input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+}
+
+.extras-field input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Cleanup --- */
+
+/* .card is a flex column, so children stretch by default —
+   align-self keeps the button its natural width. */
+.btn-cleanup {
+  background: var(--coral);
+  color: #7a2f28;
+  align-self: flex-start;
+  width: auto;
+}
+
+
+/* ==========================================================================
+   11. Responsive
+   ========================================================================== */
+
+@media (max-width: 520px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
