@@ -6,7 +6,7 @@ function redirectToApp(fragment) {
   return {
     status: 302,
     headers: {
-      Location: `${process.env.APP_BASE_URL}/auth/callback#${fragment}`,
+      Location: `${process.env.APP_BASE_URL}/#${fragment}`,
       "Set-Cookie":
         "oauth_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0"
     }
